@@ -1,0 +1,3 @@
+image:
+  repository: devopseasylearning/WEATHER_APP-auth
+  tag: ${BUILD_NUMBER}

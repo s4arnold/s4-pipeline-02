@@ -7,9 +7,9 @@ pipeline {
                 docker {
                   image 'sonarsource/sonar-scanner-cli:4.7.0'
                 }
-               }
-               environment {
-        CI = 'true'
+            }
+        environment {
+            CI = 'true'
         //  scannerHome = tool 'Sonar'
         scannerHome='/opt/sonar-scanner'
     }

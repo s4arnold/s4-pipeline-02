@@ -13,15 +13,15 @@ pipeline {
 
         stage('Build') {
             steps {
-                // This stage can include build commands, like compiling code
-                sh 'mvn clean package' // Example: Maven build
+                
+                sh 'mvn clean package' 
             }
         }
 
         stage('Test') {
             steps {
-                // This stage can include testing commands
-                sh 'mvn test' // Example: Running tests with Maven
+                
+                sh 'mvn test' 
             }
         }
 

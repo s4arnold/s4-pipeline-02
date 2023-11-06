@@ -1,10 +1,9 @@
 pipeline {
-    agent any // This means it can run on any available agent
+    agent any 
 
     stages {
         stage('Checkout') {
             steps {
-                // This stage checks out your source code from a version control system (e.g., Git)
                 script {
                     checkout scm
                 }
@@ -27,9 +26,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                // This stage can include deployment commands
-                sh 'mvn deploy' // Example: Deploying with Maven
-            }
+                sh 'mvn deploy'
         }
     }
 

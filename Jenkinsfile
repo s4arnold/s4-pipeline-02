@@ -2,10 +2,20 @@ pipeline {
     agent any 
 
     stages {
-        stage('Checkout') {
-            steps {
-                script {
-                    checkout scm
+        stage('SonarQube analysis') {
+            agent {
+                docker {
+                  image 'sonarsource/sonar-scanner-cli:4.7.0'
+                }
+               }
+               environment {
+        CI = 'true'
+        //  scannerHome = tool 'Sonar'
+        scannerHome='/opt/sonar-scanner'
+    }
+            steps{
+                withSonarQubeEnv('Sonar') {
+                    sh "${scannerHome}/bin/sonar-scanner"
                 }
             }
         }
@@ -13,31 +23,11 @@ pipeline {
         stage('Build') {
             steps {
                 
-                sh 'mvn clean package' 
+                sh '''
+                ls
+                ls -l 
+                ''' 
             }
         }
-
-        stage('Test') {
-            steps {
-                
-                sh 'mvn test' 
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                sh 'mvn deploy'
-        }
     }
-
-    post {
-        success {
-            
-            echo 'The pipeline was successful!'
-        }
-        failure {
-            
-            echo 'The pipeline failed.'
-        }
-    }
-}
+}    

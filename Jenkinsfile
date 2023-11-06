@@ -32,11 +32,11 @@ pipeline {
 
     post {
         success {
-            // This block of steps will be executed if the pipeline succeeds
+            
             echo 'The pipeline was successful!'
         }
         failure {
-            // This block of steps will be executed if the pipeline fails
+            
             echo 'The pipeline failed.'
         }
     }

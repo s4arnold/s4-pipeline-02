@@ -18,15 +18,17 @@ pipeline {
                 }
             }
         }
-
-        stage('Build') {
+        
+       stage('Build') {
             steps {
                 sh '''
+                touch file
                 ls
-                ls -l
+                ls -l 
                 '''
             }
         }
     }
 }
+
     

@@ -24,7 +24,6 @@ pipeline {
                 sh '''
                 touch file
                 ls
-                ls -l 
                 '''
             }
         }

@@ -1,8 +1,25 @@
 pipeline {
     agent any 
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+        disableConcurrentBuilds()
+        timeout (time: 60, unit: 'MINUTES')
+        timestamps()
+  }
 
     
     stages {
+        stage('Build') {
+            steps {
+                sh ''' 
+                ls
+                cat sonar-project.properties
+                ''' 
+            }
+        
+        }
+
+
         stage('SonarQube analysis') {
             agent {
                 docker {
@@ -11,7 +28,6 @@ pipeline {
                }
                environment {
         CI = 'true'
-      
         scannerHome='/opt/sonar-scanner'
     }
             steps{
@@ -19,14 +35,6 @@ pipeline {
                     sh "${scannerHome}/bin/sonar-scanner"
                 }
             }
-        }
-
-        
-        stage('Build') {
-            steps {
-                sh 'ls' 
-            }
-        
         }
     }
 }

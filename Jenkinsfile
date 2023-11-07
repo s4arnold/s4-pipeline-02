@@ -8,7 +8,7 @@ pipeline {
                 docker {
                   image 'sonarsource/sonar-scanner-cli:4.7.0'
                 }
-            }
+               }
                environment {
         CI = 'true'
         //  scannerHome = tool 'Sonar'
@@ -21,15 +21,14 @@ pipeline {
             }
         }
 
+        
         stage('Build') {
             steps {
-                sh '''
-                docker pull nginx 
-                '''
+                sh 'ls' 
             }
         
         }
-    }
+}
 }
 
 

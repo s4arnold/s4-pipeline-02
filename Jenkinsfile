@@ -2,33 +2,47 @@ pipeline {
     agent any
 
     stages {
-        stage('SonarQube analysis') {
-            agent {
-                docker {
-                  image 'sonarsource/sonar-scanner-cli:4.7.0'
-                }
-            }
-        environment {
-        CI = 'true'
-        //  scannerHome = tool 'Sonar'
-        scannerHome='/opt/sonar-scanner'
-    }
-            steps{
-                withSonarQubeEnv('Sonar') {
-                    sh "${scannerHome}/bin/sonar-scanner"
-                }
+        stage('Checkout') {
+            steps {
+                // Checkout your source code from a version control system like Git
+                checkout scm
             }
         }
 
-        stage('Hello') {
+        stage('Build') {
             steps {
-                sh '''
-                ls 
-                pwd
-                '''
+                // Compile and build your application
+                sh 'make build'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                // Run tests for your application
+                sh 'make test'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                // Deploy your application to a server or container
+                sh 'make deploy'
             }
         }
     }
+
+    post {
+        success {
+            // Actions to take when the pipeline succeeds
+            echo 'Pipeline succeeded!'
+        }
+
+        failure {
+            // Actions to take when the pipeline fails
+            echo 'Pipeline failed!'
+        }
+    }
 }
+
 
     

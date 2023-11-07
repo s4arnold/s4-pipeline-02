@@ -2,15 +2,6 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
-            steps {
-                sh '''
-                ls 
-                pwd
-                '''
-            }
-        }
-
         stage('Build') {
             steps {
                 // Compile and build your application

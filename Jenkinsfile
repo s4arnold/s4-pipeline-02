@@ -1,52 +1,33 @@
 pipeline {
     agent any 
 
-    tools {
-        // Define tool name and version
-        maven 'Maven3'
-        jdk 'JDK8'
-    }
-
+    
     stages {
-        stage('Checkout') {
-            steps {
-                // Checkout the code from the SCM
-                checkout scm
+        stage('SonarQube analysis') {
+            agent {
+                docker {
+                  image 'sonarsource/sonar-scanner-cli:4.7.0'
+                }
+            }
+               environment {
+        CI = 'true'
+        //  scannerHome = tool 'Sonar'
+        scannerHome='/opt/sonar-scanner'
+    }
+            steps{
+                withSonarQubeEnv('Sonar') {
+                    sh "${scannerHome}/bin/sonar-scanner"
+                }
             }
         }
 
         stage('Build') {
             steps {
-                // Build the code using Maven
-                sh 'mvn clean install -DskipTests'
+                sh '''
+                docker pull nginx 
+                '''
             }
-        }
-
-        stage('Archive') {
-            steps {
-                // Archive the build artifacts
-                archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
-            }
-        }
-
-        stage('Test') {
-            steps {
-                // Run the unit tests
-                sh 'mvn test'
-            }
-        }
-    }
-
-    post {
-        always {
-            // Cleanup after the build
-            deleteDir()
-        }
-        success {
-            echo 'Build was successful!'
-        }
-        failure {
-            echo 'Build failed!'
+        
         }
     }
 }

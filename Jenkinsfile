@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('SonarQube analysis') {
             agent {
-                docker {
+                label 'docker' {
                     image 'sonarsource/sonar-scanner-cli:4.7.0'
                 }
             }

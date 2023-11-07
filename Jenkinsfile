@@ -25,7 +25,7 @@ pipeline {
         stage('Archive') {
             steps {
                 // Archive the build artifacts
-                arctifacts: '**/target/*.jar', allowEmptyArchive: true
+                archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
             }
         }
 

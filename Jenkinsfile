@@ -4,8 +4,10 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Checkout your source code from a version control system like Git
-                checkout scm
+                sh '''
+                ls 
+                pwd
+                '''
             }
         }
 

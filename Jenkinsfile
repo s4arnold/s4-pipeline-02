@@ -24,6 +24,7 @@ pipeline {
                 sh '''
                 docker build -t my-docker-image .
                 docker images
+                ls
                 '''
             }
         }

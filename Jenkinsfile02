@@ -1,0 +1,61 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout the code from the SCM
+                checkout scm
+            }
+        }
+
+        stage('Build') {
+            steps {
+                // Build the code using Maven
+                sh 'mvn clean install -DskipTests'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('Your SonarQube Environment Name') {
+                    // Define SonarQube properties
+                    sh '''
+                        sonar-scanner \
+                            -Dsonar.projectKey=s4arnold-weather-app \
+                            -Dsonar.sources=. \
+                            -Dsonar.host.url=https://sonarqube.ektechsoftwaresolution.com \
+                            -Dsonar.login=ca4493a7aac752768713cee6f1ed76932b567bef
+                    '''
+                }
+            }
+        }
+
+        stage('Archive') {
+            steps {
+                // Archive the build artifacts
+                archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
+            }
+        }
+
+        stage('Test') {
+            steps {
+                // Run the unit tests
+                sh 'mvn test'
+            }
+        }
+    }
+
+    post {
+        always {
+            // Cleanup after the build
+            deleteDir()
+        }
+        success {
+            echo 'Build was successful!'
+        }
+        failure {
+            echo 'Build failed!'
+        }
+    }
+}

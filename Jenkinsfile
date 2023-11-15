@@ -1,22 +1,31 @@
 pipeline {
-    agent any 
+    agent any
 
     stages {
-        stage('SonarQube analysis') {
+         stage('SonarQube analysis') {
             agent {
                 docker {
                   image 'sonarsource/sonar-scanner-cli:4.7.0'
                 }
-            }
+               }
                environment {
         CI = 'true'
         //  scannerHome = tool 'Sonar'
         scannerHome='/opt/sonar-scanner'
-        }
+    }
             steps{
                 withSonarQubeEnv('Sonar') {
                     sh "${scannerHome}/bin/sonar-scanner"
                 }
+            }
+        }
+
+        stage('Hello') {
+            steps {
+                sh '''
+                ls 
+                pwd
+                '''
             }
         }
 

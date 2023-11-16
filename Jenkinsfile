@@ -33,6 +33,7 @@ pipeline {
                 sh ''' 
                 ls
                 pwd
+                ls -l
                 '''
             }
         }

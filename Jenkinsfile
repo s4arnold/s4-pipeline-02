@@ -19,15 +19,6 @@ pipeline {
             }
         }
 
-        stage('Hello') {
-            steps {
-                sh '''
-                ls 
-                pwd
-                '''
-            }
-        }
-
         stage('Build') {
             steps {
                 sh ''' 

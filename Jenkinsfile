@@ -7,21 +7,18 @@ pipeline {
                 docker {
                   image 'sonarsource/sonar-scanner-cli:4.7.0'
                 }
-               }
-               environment {
-        CI = 'true'
-        //  scannerHome = tool 'Sonar'
-        // scannerHome='/opt/Sonar'
+            }
+        environment {
+            CI = 'true'
+            //  scannerHome = tool 'Sonar'
+            scannerHome='/opt/sonarqube'
         }
-        steps {
-          script {
-            def scannerHome = tool 'sonar-scanner'
-            withSonarQubeEnv('Sonar') {
-                sh "${scannerHome}/bin/sonar-scanner"
-              }
-           }
-       }
-    }
+            steps {
+                withSonarQubeEnv('Sonar') {
+                    sh "${scannerHome}/bin/Sonar"
+                }
+            }
+        }
 
         stage('Build') {
             steps {

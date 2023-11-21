@@ -11,11 +11,11 @@ pipeline {
                environment {
         CI = 'true'
         //  scannerHome = tool 'Sonar'
-        scannerHome='/opt/sonar-scanner'
+        scannerHome='/opt/Sonarqube'
         }
             steps{
                 withSonarQubeEnv('Sonar') {
-                    sh "${scannerHome}/bin/sonar-scanner"
+                    sh "${scannerHome}/bin/Sonarqube"
                 }
             }
         }

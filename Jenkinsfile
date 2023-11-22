@@ -6,6 +6,11 @@ pipeline {
     timeout (time: 60, unit: 'MINUTES')
     timestamps()
   }
+
+    environment {
+		DOCKERHUB_CREDENTIALS=credentials('Dockerhub-creds')
+	}
+    
     stages {
          stage('SonarQube analysis') {
             agent {
@@ -25,14 +30,15 @@ pipeline {
             }
         }
 
-        stage('Builddd') {
-            steps {
-                sh '''
-                ls
-                cat sonar-project.properties
-                '''
-            }
-        }
+        stage('Dockerhub Login') {
+	    	steps {
+                script {
+	    		    sh '''
+                        echo "${DOCKERHUB_CREDENTIALS_PSW}" | docker login -u "${DOCKERHUB_CREDENTIALS_USR}" --password-stdin
+                    '''
+                }
+	    	}
+	    }
 
         stage('Build') {
             steps {

@@ -26,6 +26,7 @@ pipeline {
                 ls 
                 pwd
                 ls -l
+                id
                 '''
             }
         }

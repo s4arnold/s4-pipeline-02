@@ -60,45 +60,7 @@ pipeline {
     }
 }
 
-post {
-    always {
-      script {
-        notifyUpgrade(currentBuild.currentResult, "POST")
-      }
-    }
-    
-}
 
-def notifyUpgrade(String buildResult, String whereAt) {
-  if (Please_leave_this_section_as_it_is == 'origin/production') {
-    channel = 'random'
-  } else {
-    channel = 'random'
-  }
-  if (buildResult == "SUCCESS") {
-    switch(whereAt) {
-      case 'WARNING':
-        slackSend(channel: channel,
-                color: "#439FE0",
-                message: "S4-weather: Upgrade starting in ${env.WARNTIME} minutes @ ${env.BUILD_URL}  Application S4-weather")
-        break
-    case 'STARTING':
-      slackSend(channel: channel,
-                color: "good",
-                message: "S4-weather: Starting upgrade @ ${env.BUILD_URL} Application S4-weather")
-      break
-    default:
-        slackSend(channel: channel,
-                color: "good",
-                message: "S4-weather: Upgrade completed successfully @ ${env.BUILD_URL}  Application S4-weather")
-        break
-    }
-  } else {
-    slackSend(channel: channel,
-              color: "danger",
-              message: "S4-weather: Upgrade was not successful. Please investigate it immediately.  @ ${env.BUILD_URL}  Application S4-weather")
-  }
-}
 
 
 

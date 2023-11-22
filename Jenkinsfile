@@ -25,12 +25,20 @@ pipeline {
             }
         }
 
+        stage('Builddd') {
+            steps {
+                sh '''
+                ls
+                cat sonar-project.properties
+                '''
+            }
+        }
+
         stage('Buil') {
             steps {
                 sh '''
                 ls 
                 pwd
-                ls -l
                 '''
             }
         }

@@ -34,7 +34,7 @@ pipeline {
             }
         }
 
-        stage('Buil') {
+        stage('Build') {
             steps {
                 sh '''
                 ls 

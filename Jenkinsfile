@@ -98,7 +98,6 @@ pipeline {
             steps {
                 sh '''
                    docker push s4arnold/s4-pipepine-02-ui:${BUILD_NUMBER}
-                   ls
                 '''
             }
         }

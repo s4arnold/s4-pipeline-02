@@ -48,6 +48,79 @@ pipeline {
 	    	}
 	    }
 
+        stage('Build auth') {
+            steps {
+                sh '''
+                   cd auth
+                   docker build -t s4arnold/s4-pipepine-02-auth:$(BUID_NUMBER) .
+                   cd -
+                '''
+            }
+        }
+
+        stage('push auth') {
+            steps {
+                sh '''
+                   docker push s4arnold/s4-pipepine-02-auth:$(BUID_NUMBER)
+                '''
+            }
+        }
+
+        stage('Build DB') {
+            steps {
+                sh '''
+                   cd db
+                   docker build -t s4arnold/s4-pipepine-02-db:$(BUID_NUMBER) .
+                   cd -
+                '''
+            }
+        }
+
+        stage('push DB') {
+            steps {
+                sh '''
+                   docker push s4arnold/s4-pipepine-02-db:$(BUID_NUMBER)
+                '''
+            }
+        }
+
+        stage('Build UI') {
+            steps {
+                sh '''
+                   cd ui
+                   docker build -t s4arnold/s4-pipepine-02-ui:$(BUID_NUMBER) .
+                   cd -
+                '''
+            }
+        }
+
+        stage('push UI') {
+            steps {
+                sh '''
+                   docker push s4arnold/s4-pipepine-02-ui:$(BUID_NUMBER)
+                '''
+            }
+        }
+
+        stage('Build weather') {
+            steps {
+                sh '''
+                   cd weather
+                   docker build -t s4arnold/s4-pipepine-02-weather:$(BUID_NUMBER) .
+                   cd -
+                '''
+            }
+        }
+
+        stage('push weather') {
+            steps {
+                sh '''
+                   docker push s4arnold/s4-pipepine-02-weather:$(BUID_NUMBER)
+                   
+                '''
+            }
+        }
+
         stage('Build') {
             steps {
                 sh '''

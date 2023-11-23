@@ -69,8 +69,8 @@ pipeline {
         stage('Build DB') {
             steps {
                 sh '''
-                   cd DB
-                   docker build -t s4arnold/s4-pipepine-02-DB:${BUILD_NUMBER} .
+                   cd db
+                   docker build -t s4arnold/s4-pipepine-02-db:${BUILD_NUMBER} .
                    cd -
                 '''
             }
@@ -79,7 +79,7 @@ pipeline {
         stage('push DB') {
             steps {
                 sh '''
-                   docker push s4arnold/s4-pipepine-02-DB:${BUILD_NUMBER}
+                   docker push s4arnold/s4-pipepine-02-db:${BUILD_NUMBER}
                 '''
             }
         }

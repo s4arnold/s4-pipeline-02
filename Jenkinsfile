@@ -52,7 +52,7 @@ pipeline {
             steps {
                 sh '''
                    cd auth
-                   docker build -t s4arnold/s4-pipepine-02-auth:$(BUID_NUMBER) .
+                   docker build -t s4arnold/s4-pipepine-02-auth:${BUILD_NUMBER} .
                    cd -
                 '''
             }
@@ -61,7 +61,7 @@ pipeline {
         stage('push auth') {
             steps {
                 sh '''
-                   docker push s4arnold/s4-pipepine-02-auth:$(BUID_NUMBER)
+                   docker push s4arnold/s4-pipepine-02-auth:${BUILD_NUMBER}
                 '''
             }
         }
@@ -69,8 +69,8 @@ pipeline {
         stage('Build DB') {
             steps {
                 sh '''
-                   cd db
-                   docker build -t s4arnold/s4-pipepine-02-db:$(BUID_NUMBER) .
+                   cd DB
+                   docker build -t s4arnold/s4-pipepine-02-DB:${BUILD_NUMBER} .
                    cd -
                 '''
             }
@@ -79,7 +79,7 @@ pipeline {
         stage('push DB') {
             steps {
                 sh '''
-                   docker push s4arnold/s4-pipepine-02-db:$(BUID_NUMBER)
+                   docker push s4arnold/s4-pipepine-02-DB:${BUILD_NUMBER}
                 '''
             }
         }
@@ -87,8 +87,8 @@ pipeline {
         stage('Build UI') {
             steps {
                 sh '''
-                   cd ui
-                   docker build -t s4arnold/s4-pipepine-02-ui:$(BUID_NUMBER) .
+                   cd DB
+                   docker build -t s4arnold/s4-pipepine-02-UI:${BUILD_NUMBER} .
                    cd -
                 '''
             }
@@ -97,7 +97,7 @@ pipeline {
         stage('push UI') {
             steps {
                 sh '''
-                   docker push s4arnold/s4-pipepine-02-ui:$(BUID_NUMBER)
+                   docker push s4arnold/s4-pipepine-02-ui:${BUILD_NUMBER}
                 '''
             }
         }
@@ -106,7 +106,7 @@ pipeline {
             steps {
                 sh '''
                    cd weather
-                   docker build -t s4arnold/s4-pipepine-02-weather:$(BUID_NUMBER) .
+                   docker build -t s4arnold/s4-pipepine-02-weather:${BUILD_NUMBER} .
                    cd -
                 '''
             }
@@ -115,18 +115,8 @@ pipeline {
         stage('push weather') {
             steps {
                 sh '''
-                   docker push s4arnold/s4-pipepine-02-weather:$(BUID_NUMBER)
+                   docker push s4arnold/s4-pipepine-02-weather:${BUILD_NUMBER}
                    
-                '''
-            }
-        }
-
-        stage('Build') {
-            steps {
-                sh '''
-                ls 
-                pwd
-                ls -l
                 '''
             }
         }

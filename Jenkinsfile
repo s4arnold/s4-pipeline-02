@@ -121,6 +121,41 @@ pipeline {
                 '''
             }
         }
+
+        stage('Update charts') {
+            steps {
+                sh '''
+                cd ${WORKSPACE}/charts/weatherapp-auth
+cat << EOF > dev-values.yaml
+image:
+  repository: s4arnold/s4-pipepine-02-auth
+  tag: "${BUILD_NUMBER}"
+EOF
+
+cd ${WORKSPACE}/charts/weatherapp-mysql
+cat << EOF > dev-values.yaml
+image:
+  repository: s4arnold/s4-pipepine-02-db
+  tag: "${BUILD_NUMBER}"
+EOF 
+
+cd ${WORKSPACE}/charts/weatherapp-ui
+cat << EOF > dev-values.yaml
+image:
+  repository: s4arnold/s4-pipepine-02-ui
+  tag: "${BUILD_NUMBER}"
+EOF
+
+cd ${WORKSPACE}/charts/weatherapp-weather
+cat << EOF > dev-values.yaml
+image:
+  repository: s4arnold/s4-pipepine-02-weather
+  tag: "${BUILD_NUMBER}"
+EOF
+                   
+                '''
+            }
+        }
     }
 
     post {

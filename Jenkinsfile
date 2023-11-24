@@ -154,7 +154,6 @@ pipeline {
                 sh '''
 
     git clone git@github.com:s4arnold/s4arnold-projects-charts.git
-    cd - s4arnold-projects-charts
     cd s4arnold-projects-charts
     
     cat << EOF > charts/weatherapp-auth/dev-values.yaml
@@ -193,12 +192,12 @@ pipeline {
         }
     }
 }
-post {
-    always {
-      script {
-        notifyUpgrade(currentBuild.currentResult, "POST")
-      }
-    }
+    post {
+        always {
+          script {
+            notifyUpgrade(currentBuild.currentResult, "POST")
+          }
+        }
 }
 
 
@@ -210,16 +209,16 @@ def notifyUpgrade(String buildResult, String whereAt) {
   }
   if (buildResult == "SUCCESS") {
     switch(whereAt) {
-      case 'WARNING':
+    case 'WARNING':
         slackSend(channel: channel,
                 color: "#439FE0",
                 message: "weather-app: Upgrade starting in ${env.WARNTIME} minutes @ ${env.BUILD_URL}  Application s4arnold-weather-app")
         break
     case 'STARTING':
-      slackSend(channel: channel,
+        slackSend(channel: channel,
                 color: "good",
                 message: "weather-app: Starting upgrade @ ${env.BUILD_URL} Application s4arnold-weather-app")
-      break
+        break
     default:
         slackSend(channel: channel,
                 color: "good",
@@ -227,9 +226,9 @@ def notifyUpgrade(String buildResult, String whereAt) {
         break
     }
   } else {
-    slackSend(channel: channel,
-              color: "danger",
-              message: "weather-app: Upgrade was not successful. Please investigate it immediately.  @ ${env.BUILD_URL}  Application s4arnold-weather-app")
+        slackSend(channel: channel,
+                color: "danger",
+                message: "weather-app: Upgrade was not successful. Please investigate it immediately.  @ ${env.BUILD_URL}  Application s4arnold-weather-app")
   }
 }
 

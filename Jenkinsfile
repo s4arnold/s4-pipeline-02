@@ -34,6 +34,16 @@ pipeline {
             }
         }
 
+        stage('WARNING') {
+            steps {
+                script { 
+                    notifyUpgrade(currentBuild.currentResult, "WARNING")
+                    sleep(time:env.WARNTIME, unit:"MINUTES") 
+                }
+            }
+        }            
+
+
 
         
         
@@ -202,23 +212,23 @@ def notifyUpgrade(String buildResult, String whereAt) {
       case 'WARNING':
         slackSend(channel: channel,
                 color: "#439FE0",
-                message: "s4arnold-weather-app: Upgrade starting in ${env.WARNTIME} minutes @ ${env.BUILD_URL}  Application s4arnold-weather-app")
+                message: "weather-app: Upgrade starting in ${env.WARNTIME} minutes @ ${env.BUILD_URL}  Application s4arnold-weather-app")
         break
     case 'STARTING':
       slackSend(channel: channel,
                 color: "good",
-                message: "s4arnold-weather-app: Starting upgrade @ ${env.BUILD_URL} Application s4arnold-weather-app")
+                message: "weather-app: Starting upgrade @ ${env.BUILD_URL} Application s4arnold-weather-app")
       break
     default:
         slackSend(channel: channel,
                 color: "good",
-                message: "s4arnold-weather-app: Upgrade completed successfully @ ${env.BUILD_URL}  Application s4arnold-weather-app")
+                message: "weather-app: Upgrade completed successfully @ ${env.BUILD_URL}  Application s4arnold-weather-app")
         break
     }
   } else {
     slackSend(channel: channel,
               color: "danger",
-              message: "s4arnold-weather-app: Upgrade was not successful. Please investigate it immediately.  @ ${env.BUILD_URL}  Application s4arnold-weather-app")
+              message: "weather-app: Upgrade was not successful. Please investigate it immediately.  @ ${env.BUILD_URL}  Application s4arnold-weather-app")
   }
 }
 

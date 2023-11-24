@@ -155,6 +155,7 @@ pipeline {
 
     git clone git@github.com:s4arnold/s4arnold-projects-charts.git
     cd s4arnold-projects-charts
+    git fetch origin
     
     cat << EOF > charts/weatherapp-auth/dev-values.yaml
     image:

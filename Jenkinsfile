@@ -12,7 +12,35 @@ pipeline {
 	}
     
     stages {
-         stage('SonarQube analysis') {
+
+        stage('Setup parameters') {
+            stage('Setup parameters') {
+            steps {
+                script {
+                    properties([
+                        parameters([
+    
+
+                            string(name: 'WARNTIME',
+                            defaultValue: '1',
+                            description: '''Warning time (in minutes) before starting upgrade'''),
+
+                          string(
+                                defaultValue: 'develop',
+                                name: 'Please_leave_this_section_as_it_is',
+                                trim: true
+                            ),
+                        ])
+                    ])
+                }
+            }
+        }
+    }
+
+        
+        
+        
+        stage('SonarQube analysis') {
             agent {
                 docker {
                   image 'sonarsource/sonar-scanner-cli:4.7.0'
@@ -30,14 +58,6 @@ pipeline {
             }
         }
 
-        // stage("Quality Gate") {
-        //     steps {
-        //       timeout(time: 1, unit: 'HOURS') {
-        //         waitForQualityGate abortPipeline: true
-        //         }
-        //     }
-        // }
-
         stage('Dockerhub Login') {
 	    	steps {
                 script {
@@ -54,7 +74,6 @@ pipeline {
                    cd auth
                    docker build -t s4arnold/s4-pipepine-02-auth:${BUILD_NUMBER} .
                    cd -
-                   ls
                 '''
             }
         }
@@ -164,27 +183,46 @@ git push
             }
         }
     }
-
+}
     post {
-        success {
-            slackSend (channel: '#random', color: 'good', message: "SUCCESSFUL: Application S4-PIPELINE-02  Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-           }
-   
-    
-        unstable {
-            slackSend (channel: '#random', color: 'warning', message: "UNSTABLE: Application S4-PIPELINE-02  Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-           }
-   
-        failure {
-            slackSend (channel: '#random', color: '#FF0000', message: "FAILURE: Application S4-PIPELINE-02 Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-           }
-          
-        cleanup {
-            deleteDir()
-        }
+    always {
+      script {
+        notifyUpgrade(currentBuild.currentResult, "POST")
+      }
     }
 }
 
+
+def notifyUpgrade(String buildResult, String whereAt) {
+  if (Please_leave_this_section_as_it_is == 'origin/develop') {
+    channel = ''
+  } else {
+    channel = ''
+  }
+  if (buildResult == "SUCCESS") {
+    switch(whereAt) {
+      case 'WARNING':
+        slackSend(channel: channel,
+                color: "#439FE0",
+                message: "s4arnold-weather-app: Upgrade starting in ${env.WARNTIME} minutes @ ${env.BUILD_URL}  Application s4arnold-weather-app")
+        break
+    case 'STARTING':
+      slackSend(channel: channel,
+                color: "good",
+                message: "s4arnold-weather-app: Starting upgrade @ ${env.BUILD_URL} Application s4arnold-weather-app")
+      break
+    default:
+        slackSend(channel: channel,
+                color: "good",
+                message: "s4arnold-weather-app: Upgrade completed successfully @ ${env.BUILD_URL}  Application s4arnold-weather-app")
+        break
+    }
+  } else {
+    slackSend(channel: channel,
+              color: "danger",
+              message: "s4arnold-weather-app: Upgrade was not successful. Please investigate it immediately.  @ ${env.BUILD_URL}  Application s4arnold-weather-app")
+  }
+}
 
 
 

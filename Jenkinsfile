@@ -136,6 +136,7 @@ pipeline {
                    cd weather
                    docker build -t s4arnold/s4-pipepine-02-weather:${BUILD_NUMBER} .
                    cd -
+                   ls
                 '''
             }
         }

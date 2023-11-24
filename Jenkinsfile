@@ -34,7 +34,7 @@ pipeline {
             }
         }
 
-        stage('WARNING') {
+        stage('warning') {
             steps {
                 script { 
                     notifyUpgrade(currentBuild.currentResult, "WARNING")

@@ -192,7 +192,7 @@ pipeline {
         }
     }
 }
-    post {
+        post {
         always {
           script {
             notifyUpgrade(currentBuild.currentResult, "POST")

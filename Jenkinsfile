@@ -194,13 +194,13 @@ pipeline {
         }
     }
 }
-        post {
+    post {
         always {
           script {
-            notifyUpgrade(currentBuild.currentResult, "POST")
-          }
+                notifyUpgrade(currentBuild.currentResult, "POST")
+            }
         }
-}
+    }
 
 
 def notifyUpgrade(String buildResult, String whereAt) {

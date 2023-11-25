@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        label 'testing'
+    }    
     options {
     buildDiscarder(logRotator(numToKeepStr: '20'))
     disableConcurrentBuilds()

@@ -84,7 +84,6 @@ pipeline {
                    cd auth
                    docker build -t s4arnold/s4-pipepine-02-auth:${BUILD_NUMBER} .
                    cd -
-                   ls
                 '''
             }
         }
@@ -155,7 +154,8 @@ pipeline {
         stage('Update charts') {
             steps {
                 sh '''
-
+    > s4arnold-projects-charts 
+    ###rm -r s4arnold-projects-charts
     git clone git@github.com:s4arnold/s4arnold-projects-charts.git
     cd s4arnold-projects-charts
     

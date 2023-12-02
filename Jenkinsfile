@@ -1,5 +1,7 @@
 pipeline {
-    agent any 
+    agent {
+        label 'production'
+    }
 
     options {
         buildDiscarder(logRotator(numToKeepStr: '20'))

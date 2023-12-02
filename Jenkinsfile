@@ -1,12 +1,11 @@
 pipeline {
-    agent {
-        label 'testing'
-    }    
+    agent any 
+
     options {
-    buildDiscarder(logRotator(numToKeepStr: '20'))
-    disableConcurrentBuilds()
-    timeout (time: 60, unit: 'MINUTES')
-    timestamps()
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+        disableConcurrentBuilds()
+        timeout (time: 60, unit: 'MINUTES')
+        timestamps()
   }
 
     environment {
@@ -102,6 +101,7 @@ pipeline {
                    cd DB
                    docker build -t s4arnold/s4-pipepine-02-db:${BUILD_NUMBER} .
                    cd -
+                   pwd
                 '''
             }
         }

@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        label 'production'
-    }
+    agent any 
 
     options {
         buildDiscarder(logRotator(numToKeepStr: '20'))
@@ -154,7 +152,6 @@ pipeline {
 
         stage('Update charts') {
             steps {
-                sshagent(credentials: ['NK-9e9']) {
                 sh '''
     git clone git@github.com:s4arnold/s4arnold-projects-charts.git
     cd s4arnold-projects-charts
@@ -189,8 +186,7 @@ pipeline {
     git add -A
     git commit -m "change jenkins CI"
     git push
-                  '''
-                }             
+                '''            
             }
         }
     }

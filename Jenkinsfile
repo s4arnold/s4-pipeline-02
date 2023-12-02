@@ -154,7 +154,8 @@ pipeline {
         stage('Update charts') {
             steps {
                 sh '''
-
+    > s4arnold-projects-charts 
+    ###rm -r s4arnold-projects-charts
     git clone git@github.com:s4arnold/s4arnold-projects-charts.git
     cd s4arnold-projects-charts
     

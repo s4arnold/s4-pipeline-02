@@ -101,7 +101,6 @@ pipeline {
                    cd DB
                    docker build -t s4arnold/s4-pipepine-02-db:${BUILD_NUMBER} .
                    cd -
-                   pwd
                 '''
             }
         }
@@ -153,9 +152,9 @@ pipeline {
 
         stage('Update charts') {
             steps {
+                sshagent(credentials: ['NK-9e9']) {
                 sh '''
-    > s4arnold-projects-charts 
-    ###rm -r s4arnold-projects-charts
+    rm -rf s4arnold-projects-charts
     git clone git@github.com:s4arnold/s4arnold-projects-charts.git
     cd s4arnold-projects-charts
     
@@ -189,8 +188,8 @@ pipeline {
     git add -A
     git commit -m "change jenkins CI"
     git push
-                 
-                '''
+                  '''
+                }             
             }
         }
     }

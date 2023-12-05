@@ -25,7 +25,7 @@ pipeline {
                                 description: '''Warning time (in minutes) before starting upgrade'''
                             ),
                             string(
-                                defaultValue: 'develop',
+                                defaultValue: 'production',
                                 name: 'Please_leave_this_section_as_it_is',
                                 trim: true
                             ),
@@ -153,6 +153,7 @@ pipeline {
         stage('Update charts') {
             steps {
                 sh '''
+    
     git clone git@github.com:s4arnold/s4arnold-projects-charts.git
     cd s4arnold-projects-charts
     

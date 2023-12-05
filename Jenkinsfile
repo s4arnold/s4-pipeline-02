@@ -25,7 +25,7 @@ pipeline {
                                 description: '''Warning time (in minutes) before starting upgrade'''
                             ),
                             string(
-                                defaultValue: 'develop',
+                                defaultValue: 'production',
                                 name: 'Please_leave_this_section_as_it_is',
                                 trim: true
                             ),
@@ -46,9 +46,6 @@ pipeline {
 
 
 
-        
-        
-        
         stage('SonarQube analysis') {
             agent {
                 docker {
@@ -83,6 +80,7 @@ pipeline {
                    cd auth
                    docker build -t s4arnold/s4-pipepine-02-auth:${BUILD_NUMBER} .
                    cd -
+                   ls
                 '''
             }
         }

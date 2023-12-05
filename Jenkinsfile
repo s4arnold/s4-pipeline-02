@@ -49,7 +49,7 @@ pipeline {
         stage('SonarQube analysis') {
             agent {
                 docker {
-                  image 'sonarsource/sonar-scanner-cli:4.7.0'
+                  image 'sonarsource/sonar-scanner-cli:latest'
                 }
                }
                environment {
@@ -80,7 +80,6 @@ pipeline {
                    cd auth
                    docker build -t s4arnold/s4-pipepine-02-auth:${BUILD_NUMBER} .
                    cd -
-                   
                 '''
             }
         }
@@ -151,7 +150,7 @@ pipeline {
         stage('Update charts') {
             steps {
                 sh '''
-    
+    rm -rf s4arnold-projects-charts
     git clone git@github.com:s4arnold/s4arnold-projects-charts.git
     cd s4arnold-projects-charts
     

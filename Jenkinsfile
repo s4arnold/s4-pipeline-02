@@ -189,7 +189,7 @@ pipeline {
             }
         }
     }
-}
+
     post {
         always {
           script {
@@ -197,7 +197,7 @@ pipeline {
             }
         }
     }
-
+}
 
 def notifyUpgrade(String buildResult, String whereAt) {
   if (Please_leave_this_section_as_it_is == 'origin/production') {

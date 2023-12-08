@@ -220,6 +220,40 @@ pipeline {
             }
         }
 
+        stage('QA: pull images') {
+            when{
+                expression {
+                     env.ENVIRONMENT == 'QA' 
+                    }
+                }
+            steps {
+                sh '''
+                   docker pull  s4arnold/s4-pipeline-auth:$auth_tag  
+                   docker pull  s4arnold/s4-pipeline-ui:$ui_tag 
+                   docker pull  s4arnold/s4-pipeline-db:$db_tag
+                   docker pull  s4arnold/s4-pipeline-weather:$weather_tag 
+                
+               '''       
+            }
+        }
+
+        stage('QA: tag images') {
+            when{
+                expression {
+                    env.ENVIRONMENT == 'QA'
+                }
+            }
+            steps {
+                sh '''
+                   docker tag  s4arnold/s4-pipeline-auth:$auth_tag   s4arnold/s4-pipeline-auth:qa-$auth_tag
+                   docker tag  s4arnold/s4-pipeline-ui:$ui_tag       s4arnold/s4-pipeline-ui:qa-$ui_tag
+                   docker tag  s4arnold/s4-pipeline-db:$db_tag       s4arnold/s4-pipeline-db:qa-$db_tag
+                   docker tag  s4arnold/s4-pipeline-weather:$weather_tag   s4arnold/s4-pipeline-weather:qa-$weather_tag 
+                
+               '''       
+            }
+        }
+
         stage('Update DEV charts') {
             when{
                 expression {
@@ -283,25 +317,25 @@ pipeline {
     cat << EOF > charts/weatherapp-auth/qa-values.yaml
     image:
       repository: s4arnold/s4-pipepine-02-auth
-      tag: "${BUILD_NUMBER}"
+      tag: qa-$auth_tag
     EOF
     
     cat << EOF > charts/weatherapp-mysql/qa-values.yaml
     image:
       repository: s4arnold/s4-pipepine-02-db
-      tag: "${BUILD_NUMBER}"
+      tag: qa-$db_tag
     EOF 
     
     cat << EOF > charts/weatherapp-ui/qa-values.yaml
     image:
       repository: s4arnold/s4-pipepine-02-ui
-      tag: "${BUILD_NUMBER}"
+      tag: qa-$ui_tag
     EOF
     
     cat << EOF > charts/weatherapp-weather/qa-values.yaml
     image:
       repository: s4arnold/s4-pipepine-02-weather
-      tag: "${BUILD_NUMBER}"
+      tag: qa-$weather_tag
     EOF
     
     git config --global user.name "s4arnold"

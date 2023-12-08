@@ -1,4 +1,4 @@
-pipepine {
+pipeline {
     agent any 
 
     options {

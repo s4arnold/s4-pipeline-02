@@ -152,7 +152,13 @@ pipeline {
             }
         }
 
-        stage('Update charts') {
+        stage('Update DEV charts') {
+            when{
+                expression {
+                   env.ENVIRONMENT == 'DEV' 
+                }
+            }
+
             steps {
                 sh '''
     rm -rf s4arnold-projects-charts
@@ -192,7 +198,102 @@ pipeline {
                 '''            
             }
         }
+
+        stage('Update QA charts') {
+            when{
+                expression {
+                   env.ENVIRONMENT == 'QA' 
+                }
+            }
+
+            steps {
+                sh '''
+    rm -rf s4arnold-projects-charts
+    git clone git@github.com:s4arnold/s4arnold-projects-charts.git
+    cd s4arnold-projects-charts
+    
+    cat << EOF > charts/weatherapp-auth/qa-values.yaml
+    image:
+      repository: s4arnold/s4-pipepine-02-auth
+      tag: "${BUILD_NUMBER}"
+    EOF
+    
+    cat << EOF > charts/weatherapp-mysql/qa-values.yaml
+    image:
+      repository: s4arnold/s4-pipepine-02-db
+      tag: "${BUILD_NUMBER}"
+    EOF 
+    
+    cat << EOF > charts/weatherapp-ui/qa-values.yaml
+    image:
+      repository: s4arnold/s4-pipepine-02-ui
+      tag: "${BUILD_NUMBER}"
+    EOF
+    
+    cat << EOF > charts/weatherapp-weather/qa-values.yaml
+    image:
+      repository: s4arnold/s4-pipepine-02-weather
+      tag: "${BUILD_NUMBER}"
+    EOF
+    
+    git config --global user.name "s4arnold"
+    git config --global user.email "tchuamarnold211@gmail.com"
+    
+    git add -A
+    git commit -m "change jenkins CI"
+    git push
+                '''            
+            }
+        }
+
+        stage('Update PREPROD charts') {
+            when{
+                expression {
+                   env.ENVIRONMENT == 'PREPROD' 
+                }
+            }
+
+            steps {
+                sh '''
+    rm -rf s4arnold-projects-charts
+    git clone git@github.com:s4arnold/s4arnold-projects-charts.git
+    cd s4arnold-projects-charts
+    
+    cat << EOF > charts/weatherapp-auth/preprod-values.yaml
+    image:
+      repository: s4arnold/s4-pipepine-02-auth
+      tag: "${BUILD_NUMBER}"
+    EOF
+    
+    cat << EOF > charts/weatherapp-mysql/preprod-values.yaml
+    image:
+      repository: s4arnold/s4-pipepine-02-db
+      tag: "${BUILD_NUMBER}"
+    EOF 
+    
+    cat << EOF > charts/weatherapp-ui/preprod-values.yaml
+    image:
+      repository: s4arnold/s4-pipepine-02-ui
+      tag: "${BUILD_NUMBER}"
+    EOF
+    
+    cat << EOF > charts/weatherapp-weather/preprod-values.yaml
+    image:
+      repository: s4arnold/s4-pipepine-02-weather
+      tag: "${BUILD_NUMBER}"
+    EOF
+    
+    git config --global user.name "s4arnold"
+    git config --global user.email "tchuamarnold211@gmail.com"
+    
+    git add -A
+    git commit -m "change jenkins CI"
+    git push
+                '''            
+            }
+        }    
     }
+    
 
     post {
         always {

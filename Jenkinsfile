@@ -26,12 +26,12 @@ pipeline {
                             
                             string(
                                 name: 'WARNTIME',
-                                defaultValue: '1',
+                                defaultValue: '0',
                                 description: '''Warning time (in minutes) before starting upgrade'''
                             ),
                             string(
                                 defaultValue: 'production',
-                                name: 'Please_leave_this_section_as_it_is',
+                                name: 'Please_leave_this_section',
                                 trim: true
                             ),
                         ])
@@ -52,6 +52,11 @@ pipeline {
 
 
         stage('SonarQube analysis') {
+            when{
+                expression {
+                   env.ENVIRONMENT == 'DEV' 
+                }
+            }
             agent {
                 docker {
                   image 'sonarsource/sonar-scanner-cli:4.8.0'

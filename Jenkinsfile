@@ -228,10 +228,10 @@ pipeline {
                 }
             steps {
                 sh '''
-                   docker pull  s4arnold/s4-pipeline-02-auth:${env.auth_tag}
-                   docker pull  s4arnold/s4-pipeline-02-ui:${env.ui_tag}
-                   docker pull  s4arnold/s4-pipeline-02-db:${env.db_tag}
-                   docker pull  s4arnold/s4-pipeline-02-weather:${env.weather_tag} 
+                   docker pull  s4arnold/s4-pipeline-02-auth:$auth_tag  
+                   docker pull  s4arnold/s4-pipeline-02-ui:$ui_tag 
+                   docker pull  s4arnold/s4-pipeline-02-db:$db_tag
+                   docker pull  s4arnold/s4-pipeline-02:$weather_tag 
                 
                '''       
             }
@@ -304,7 +304,7 @@ pipeline {
         stage('Update QA charts') {
             when{
                 expression {
-                   env.ENVIRONMENT == 'QA' 
+                   env.ENVIRONMENT == 'QA' }
                 }
             }
 

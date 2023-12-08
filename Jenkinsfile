@@ -20,7 +20,7 @@ pipeline {
                     properties([
                         parameters([
                             choice( 
-                                choices: ['DEV', 'QA', 'PREPOD'], 
+                                choices: ['DEV', 'QA', 'PREPROD'], 
                                 name: 'ENVIRONMENT'
                             ),
                             
@@ -52,7 +52,7 @@ pipeline {
 
 
         stage('SonarQube analysis') {
-            when{
+            when {
                 expression {
                    env.ENVIRONMENT == 'DEV' 
                 }

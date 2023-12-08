@@ -24,25 +24,25 @@ pipeline {
                                 name: 'ENVIRONMENT'
                             ),
                             string(
-                                defaultValue: '18',
+                                defaultValue: '20',
                                 name: 'auth_tag',
                                 description: '''type the auth image tag''',
                                 ),
                             
                             string(
-                                defaultValue: '18',
+                                defaultValue: '20',
                                 name: 'ui_tag',
                                 description: '''type the weather image tag''',
                                 ),
                             
                             string(
-                                defaultValue: '18',
+                                defaultValue: '20',
                                 name: 'db_tag',
                                 description: '''type the ui image tag''',
                                 ),
                             
                             string(
-                                defaultValue: '18',
+                                defaultValue: '20',
                                 name: 'weather_tag',
                                 description: '''type the db image tag''',
                                 ),
@@ -222,7 +222,7 @@ pipeline {
         }
 
         stage('QA: pull images') {
-            when{
+            when{   
                 expression {
                      env.ENVIRONMENT == 'QA' 
                     }
@@ -230,30 +230,30 @@ pipeline {
             steps {
                 sh '''
                    docker pull  s4arnold/s4-pipeline-02-auth:$auth_tag  
-                   docker pull  s4arnold/s4-pipeline-02-ui:$ui_tag 
-                   docker pull  s4arnold/s4-pipeline-02-db:$db_tag
-                   docker pull  s4arnold/s4-pipeline-02:$weather_tag 
+                   docker pull  s4arnold/s4-pipeline-02-db:$db_tag 
+                   docker pull  s4arnold/s4-pipeline-02-ui:$ui_tag
+                   docker pull  s4arnold/s4-pipeline-02-weather:$weather_tag 
                 
                '''       
             }
         }
 
-        stage('QA: tag images') {
-            when{
-                expression {
-                    env.ENVIRONMENT == 'QA'
-                }
-            }
-            steps {
-                sh '''
-                   docker tag  s4arnold/s4-pipeline-02-auth:${env.auth_tag}   s4arnold/s4-pipeline-02-auth:qa-${env.auth_tag}
-                   docker tag  s4arnold/s4-pipeline-02-ui:${env.ui_tag}       s4arnold/s4-pipeline-02-ui:qa-${env.ui_tag}
-                   docker tag  s4arnold/s4-pipeline-02-db:${env.db_tag}       s4arnold/s4-pipeline-02-db:qa-${env.db_tag}
-                   docker tag  s4arnold/s4-pipeline-02-weather:${env.weather_tag}   s4arnold/s4-pipeline-02-weather:qa-${env.weather_tag} 
-                
-               '''       
-            }
-        }
+        // stage('QA: tag images') {
+        //     when{
+        //         expression {
+        //             env.ENVIRONMENT == 'QA'
+        //         }
+        //     }
+        //     steps {
+        //         sh '''
+        //            docker tag  s4arnold/s4-pipeline-02-auth:$auth_tag   s4arnold/s4-pipeline-02-auth:qa-$auth_tag
+        //            docker tag  s4arnold/s4-pipeline-02-db:$db_tag       s4arnold/s4-pipeline-02-db:qa-$db_tag
+        //            docker tag  s4arnold/s4-pipeline-02-ui:$ui_tag      s4arnold/s4-pipeline-02-ui:qa-$ui_tag
+        //            docker tag  s4arnold/s4-pipeline-02-weather:$weather_tag   s4arnold/s4-pipeline-02-weather:qa-$weather_tag 
+        //         
+        //        '''       
+        //     }
+        // }
 
         stage('Update DEV charts') {
             when{
@@ -318,25 +318,25 @@ pipeline {
     cat << EOF > charts/weatherapp-auth/qa-values.yaml
     image:
       repository: s4arnold/s4-pipepine-02-auth
-      tag: qa-$auth_tag
+      tag: $auth_tag
     EOF
     
     cat << EOF > charts/weatherapp-mysql/qa-values.yaml
     image:
       repository: s4arnold/s4-pipepine-02-db
-      tag: qa-$db_tag
+      tag: $db_tag
     EOF 
     
     cat << EOF > charts/weatherapp-ui/qa-values.yaml
     image:
       repository: s4arnold/s4-pipepine-02-ui
-      tag: qa-$ui_tag
+      tag: $ui_tag
     EOF
     
     cat << EOF > charts/weatherapp-weather/qa-values.yaml
     image:
       repository: s4arnold/s4-pipepine-02-weather
-      tag: qa-$weather_tag
+      tag: $weather_tag
     EOF
     
     git config --global user.name "s4arnold"

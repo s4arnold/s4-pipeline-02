@@ -228,10 +228,10 @@ pipeline {
                 }
             steps {
                 sh '''
-                   docker pull  s4arnold/s4-pipeline-auth:$auth_tag  
-                   docker pull  s4arnold/s4-pipeline-ui:$ui_tag 
-                   docker pull  s4arnold/s4-pipeline-db:$db_tag
-                   docker pull  s4arnold/s4-pipeline-weather:$weather_tag 
+                   docker pull  s4arnold/s4arnold/s4-pipeline-02-auth:$auth_tag  
+                   docker pull  s4arnold/s4arnold/s4-pipeline-02-ui:$ui_tag 
+                   docker pull  s4arnold/s4arnold/s4-pipeline-02-db:$db_tag
+                   docker pull  s4arnold/s4arnold/s4-pipeline-02:$weather_tag 
                 
                '''       
             }
@@ -245,10 +245,10 @@ pipeline {
             }
             steps {
                 sh '''
-                   docker tag  s4arnold/s4-pipeline-auth:$auth_tag   s4arnold/s4-pipeline-auth:qa-$auth_tag
-                   docker tag  s4arnold/s4-pipeline-ui:$ui_tag       s4arnold/s4-pipeline-ui:qa-$ui_tag
-                   docker tag  s4arnold/s4-pipeline-db:$db_tag       s4arnold/s4-pipeline-db:qa-$db_tag
-                   docker tag  s4arnold/s4-pipeline-weather:$weather_tag   s4arnold/s4-pipeline-weather:qa-$weather_tag 
+                   docker tag  s4arnold/s4-pipeline-02-auth:$auth_tag   s4arnold/s4-pipeline-02-auth:qa-$auth_tag
+                   docker tag  s4arnold/s4-pipeline-02-ui:$ui_tag       s4arnold/s4-pipeline-02-ui:qa-$ui_tag
+                   docker tag  s4arnold/s4-pipeline-02-db:$db_tag       s4arnold/s4-pipeline-02-db:qa-$db_tag
+                   docker tag  s4arnold/s4-pipeline-02-weather:$weather_tag   s4arnold/s4-pipeline-02-weather:qa-$weather_tag 
                 
                '''       
             }

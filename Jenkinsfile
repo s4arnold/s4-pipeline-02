@@ -19,6 +19,11 @@ pipeline {
                 script {
                     properties([
                         parameters([
+                            choice( 
+                                choices: ['DEV', 'QA', 'PREPOD'], 
+                                name: 'ENVIRONMENT'
+                            ),
+                            
                             string(
                                 name: 'WARNTIME',
                                 defaultValue: '1',

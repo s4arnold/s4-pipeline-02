@@ -23,6 +23,29 @@ pipeline {
                                 choices: ['DEV', 'QA', 'PREPROD'], 
                                 name: 'ENVIRONMENT'
                             ),
+                            string(
+                                defaultValue: '30',
+                                name: 'auth_tag',
+                                description: '''type the auth image tag''',
+                                ),
+                            
+                            string(
+                                defaultValue: '30',
+                                name: 'ui_tag',
+                                description: '''type the weather image tag''',
+                                ),
+                            
+                            string(
+                                defaultValue: '30',
+                                name: 'db_tag',
+                                description: '''type the ui image tag''',
+                                ),
+                            
+                            string(
+                                defaultValue: '30',
+                                name: 'weather_tag',
+                                description: '''type the db image tag''',
+                                ),
                             
                             string(
                                 name: 'WARNTIME',
@@ -206,7 +229,7 @@ pipeline {
 
             steps {
                 sh '''
-    rm -rf s4arnold-projects-charts
+    rm -rf s4arnold-projects-charts || true 
     git clone git@github.com:s4arnold/s4arnold-projects-charts.git
     cd s4arnold-projects-charts
     

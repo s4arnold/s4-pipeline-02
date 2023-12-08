@@ -304,7 +304,7 @@ pipeline {
         stage('Update QA charts') {
             when{
                 expression {
-                   env.ENVIRONMENT == 'QA' }
+                   env.ENVIRONMENT == 'QA' 
                 }
             }
 

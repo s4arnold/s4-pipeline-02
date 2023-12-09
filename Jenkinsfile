@@ -116,7 +116,7 @@ pipeline {
             steps {
                 sh '''
                    cd auth
-                   docker build -t s4arnold/s4-pipeline-02-auth:${BUILD_NUMBER} .
+                   docker build -t s4arnold/s4-pipepine-02-auth:${BUILD_NUMBER} .
                    cd -
                 '''
             }
@@ -130,7 +130,7 @@ pipeline {
             }
             steps {
                 sh '''
-                   docker push s4arnold/s4-pipeline-02-auth:${BUILD_NUMBER}
+                   docker push s4arnold/s4-pipepine-02-auth:${BUILD_NUMBER}
                 '''
             }
         }
@@ -144,7 +144,7 @@ pipeline {
             steps {
                 sh '''
                    cd DB
-                   docker build -t s4arnold/s4-pipeline-02-db:${BUILD_NUMBER} .
+                   docker build -t s4arnold/s4-pipepine-02-db:${BUILD_NUMBER} .
                    cd -
                    ls -l
                 '''
@@ -159,7 +159,7 @@ pipeline {
             }
             steps {
                 sh '''
-                   docker push s4arnold/s4-pipeline-02-db:${BUILD_NUMBER}
+                   docker push s4arnold/s4-pipepine-02-db:${BUILD_NUMBER}
                 '''
             }
         }
@@ -173,7 +173,7 @@ pipeline {
             steps {
                 sh '''
                    cd UI
-                   docker build -t s4arnold/s4-pipeline-02-ui:${BUILD_NUMBER} .
+                   docker build -t s4arnold/s4-pipepine-02-ui:${BUILD_NUMBER} .
                    cd -
                 '''
             }
@@ -187,7 +187,7 @@ pipeline {
             }
             steps {
                 sh '''
-                   docker push s4arnold/s4-pipeline-02-ui:${BUILD_NUMBER}
+                   docker push s4arnold/s4-pipepine-02-ui:${BUILD_NUMBER}
                 '''
             }
         }
@@ -201,7 +201,7 @@ pipeline {
             steps {
                 sh '''
                    cd weather
-                   docker build -t s4arnold/s4-pipeline-02-weather:${BUILD_NUMBER} .
+                   docker build -t s4arnold/s4-pipepine-02-weather:${BUILD_NUMBER} .
                    cd -
                 '''
             }
@@ -215,7 +215,7 @@ pipeline {
             }
             steps {
                 sh '''
-                   docker push s4arnold/s4-pipeline-02-weather:${BUILD_NUMBER}
+                   docker push s4arnold/s4-pipepine-02-weather:${BUILD_NUMBER}
                    
                 '''
             }
@@ -229,10 +229,10 @@ pipeline {
                 }
             steps {
                 sh '''
-                   docker pull  s4arnold/s4-pipeline-02-auth:$auth_tag  
-                   docker pull  s4arnold/s4-pipeline-02-db:$db_tag 
-                   docker pull  s4arnold/s4-pipeline-02-ui:$ui_tag
-                   docker pull  s4arnold/s4-pipeline-02-weather:$weather_tag 
+                   docker pull  s4arnold/s4-pipepine-02-auth:$auth_tag  
+                   docker pull  s4arnold/s4-pipepine-02-db:$db_tag 
+                   docker pull  s4arnold/s4-pipepine-02-ui:$ui_tag
+                   docker pull  s4arnold/s4-pipepine-02-weather:$weather_tag 
                 
                '''       
             }
@@ -246,10 +246,10 @@ pipeline {
             }
              steps {
                  sh '''
-                    docker tag  s4arnold/s4-pipeline-02-auth:$auth_tag   s4arnold/s4-pipeline-02-auth:qa-$auth_tag
-                    docker tag  s4arnold/s4-pipeline-02-db:$db_tag       s4arnold/s4-pipeline-02-db:qa-$db_tag
-                    docker tag  s4arnold/s4-pipeline-02-ui:$ui_tag      s4arnold/s4-pipeline-02-ui:qa-$ui_tag
-                    docker tag  s4arnold/s4-pipeline-02-weather:$weather_tag   s4arnold/s4-pipeline-02-weather:qa-$weather_tag 
+                    docker tag  s4arnold/s4-pipepine-02-auth:$auth_tag   s4arnold/s4-pipepine-02-auth:qa-$auth_tag
+                    docker tag  s4arnold/s4-pipepine-02-db:$db_tag       s4arnold/s4-pipepine-02-db:qa-$db_tag
+                    docker tag  s4arnold/s4-pipepine-02-ui:$ui_tag      s4arnold/s4-pipepine-02-ui:qa-$ui_tag
+                    docker tag  s4arnold/s4-pipepine-02-weather:$weather_tag   s4arnold/s4-pipepine-02-weather:qa-$weather_tag 
                  
                 '''       
             }
@@ -270,25 +270,25 @@ pipeline {
     
     cat << EOF > charts/weatherapp-auth/dev-values.yaml
     image:
-      repository: s4arnold/s4-pipeline-02-auth
+      repository: s4arnold/s4-pipepine-02-auth
       tag: "${BUILD_NUMBER}"
     EOF
     
     cat << EOF > charts/weatherapp-mysql/dev-values.yaml
     image:
-      repository: s4arnold/s4-pipeline-02-db
+      repository: s4arnold/s4-pipepine-02-db
       tag: "${BUILD_NUMBER}"
     EOF 
     
     cat << EOF > charts/weatherapp-ui/dev-values.yaml
     image:
-      repository: s4arnold/s4-pipeline-02-ui
+      repository: s4arnold/s4-pipepine-02-ui
       tag: "${BUILD_NUMBER}"
     EOF
     
     cat << EOF > charts/weatherapp-weather/dev-values.yaml
     image:
-      repository: s4arnold/s4-pipeline-02-weather
+      repository: s4arnold/s4-pipepine-02-weather
       tag: "${BUILD_NUMBER}"
     EOF
     
@@ -317,25 +317,25 @@ pipeline {
     
     cat << EOF > charts/weatherapp-auth/qa-values.yaml
     image:
-      repository: s4arnold/s4-pipeline-02-auth
+      repository: s4arnold/s4-pipepine-02-auth
       tag: qa-$auth_tag
     EOF
     
     cat << EOF > charts/weatherapp-mysql/qa-values.yaml
     image:
-      repository: s4arnold/s4-pipeline-02-db
+      repository: s4arnold/s4-pipepine-02-db
       tag: qa-$db_tag
     EOF 
     
     cat << EOF > charts/weatherapp-ui/qa-values.yaml
     image:
-      repository: s4arnold/s4-pipeline-02-ui
+      repository: s4arnold/s4-pipepine-02-ui
       tag: qa-$ui_tag
     EOF
     
     cat << EOF > charts/weatherapp-weather/qa-values.yaml
     image:
-      repository: s4arnold/s4-pipeline-02-weather
+      repository: s4arnold/s4-pipepine-02-weather
       tag: qa-$weather_tag
     EOF
     
@@ -364,25 +364,25 @@ pipeline {
     
     cat << EOF > charts/weatherapp-auth/preprod-values.yaml
     image:
-      repository: s4arnold/s4-pipeline-02-auth
+      repository: s4arnold/s4-pipepine-02-auth
       tag: "${BUILD_NUMBER}"
     EOF
     
     cat << EOF > charts/weatherapp-mysql/preprod-values.yaml
     image:
-      repository: s4arnold/s4-pipeline-02-db
+      repository: s4arnold/s4-pipepine-02-db
       tag: "${BUILD_NUMBER}"
     EOF 
     
     cat << EOF > charts/weatherapp-ui/preprod-values.yaml
     image:
-      repository: s4arnold/s4-pipeline-02-ui
+      repository: s4arnold/s4-pipepine-02-ui
       tag: "${BUILD_NUMBER}"
     EOF
     
     cat << EOF > charts/weatherapp-weather/preprod-values.yaml
     image:
-      repository: s4arnold/s4-pipeline-02-weather
+      repository: s4arnold/s4-pipepine-02-weather
       tag: "${BUILD_NUMBER}"
     EOF
     

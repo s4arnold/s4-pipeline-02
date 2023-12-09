@@ -88,8 +88,9 @@ pipeline {
                environment {
         CI = 'true'
         //  scannerHome = tool 'Sonar'
-        scannerHome='/opt/sonar-scanner'
-    }
+        scannerHome='/opt/sonar-scanner/bin/sonar-scanner -X'    
+
+        }
             steps{
                 withSonarQubeEnv('Sonar') {
                     sh "${scannerHome}/bin/sonar-scanner"
@@ -248,7 +249,7 @@ pipeline {
                  sh '''
                     docker tag  s4arnold/s4-pipepine-02-auth:$auth_tag   s4arnold/s4-pipepine-02-auth:qa-$auth_tag
                     docker tag  s4arnold/s4-pipepine-02-db:$db_tag       s4arnold/s4-pipepine-02-db:qa-$db_tag
-                    docker tag  s4arnold/s4-pipepine-02-ui:$ui_tag      s4arnold/s4-pipepine-02-ui:qa-$ui_tag
+                    docker tag  s4arnold/s4-pipepine-02-ui:$ui_tag       s4arnold/s4-pipepine-02-ui:qa-$ui_tag
                     docker tag  s4arnold/s4-pipepine-02-weather:$weather_tag   s4arnold/s4-pipepine-02-weather:qa-$weather_tag 
                  
                 '''       

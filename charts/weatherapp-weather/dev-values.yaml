@@ -1,3 +1,3 @@
 image:
-  repository: devopseasylearning/WEATHER_APP-weather
-  tag: ""
+  repository: s4arnold/s4-pipepine-02-weather
+  tag: "$weather_tag"

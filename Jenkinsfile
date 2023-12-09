@@ -146,7 +146,7 @@ pipeline {
                    cd DB
                    docker build -t s4arnold/s4-pipeline-02-db:${BUILD_NUMBER} .
                    cd -
-                   ls 
+                   ls -l
                 '''
             }
         }

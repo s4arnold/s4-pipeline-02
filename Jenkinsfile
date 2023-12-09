@@ -2,7 +2,7 @@ pipeline {
     agent any 
 
     options {
-        buildDiscarder(logRotator(numToKeepStr: '10'))
+        buildDiscarder(logRotator(numToKeepStr: '20'))
         disableConcurrentBuilds()
         timeout (time: 60, unit: 'MINUTES')
         timestamps()
@@ -24,25 +24,25 @@ pipeline {
                                 name: 'ENVIRONMENT'
                             ),
                             string(
-                                defaultValue: '10',
+                                defaultValue: '20',
                                 name: 'auth_tag',
                                 description: '''type the auth image tag''',
                                 ),
                             
                             string(
-                                defaultValue: '10',
+                                defaultValue: '20',
                                 name: 'db_tag',
                                 description: '''type the weather image tag''',
                                 ),
                             
                             string(
-                                defaultValue: '10',
+                                defaultValue: '20',
                                 name: 'ui_tag',
                                 description: '''type the ui image tag''',
                                 ),
                             
                             string(
-                                defaultValue: '10',
+                                defaultValue: '20',
                                 name: 'weather_tag',
                                 description: '''type the db image tag''',
                                 ),

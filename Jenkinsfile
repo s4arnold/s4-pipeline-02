@@ -88,7 +88,7 @@ pipeline {
                environment {
         CI = 'true'
         //  scannerHome = tool 'Sonar'
-        scannerHome='/opt/sonar-scanner/bin/sonar-scanner -X'    
+        scannerHome='/opt/sonar-scanner'    
 
         }
             steps{

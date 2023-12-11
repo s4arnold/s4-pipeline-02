@@ -2,7 +2,7 @@ pipeline {
     agent any 
 
     options {
-        buildDiscarder(logRotator(numToKeepStr: '20'))
+        buildDiscarder(logRotator(numToKeepStr: '50'))
         disableConcurrentBuilds()
         timeout (time: 60, unit: 'MINUTES')
         timestamps()
@@ -24,27 +24,27 @@ pipeline {
                                 name: 'ENVIRONMENT'
                             ),
                             string(
-                                defaultValue: '20',
+                                defaultValue: '50',
                                 name: 'auth_tag',
                                 description: '''type the auth image tag''',
                                 ),
                             
                             string(
-                                defaultValue: '20',
+                                defaultValue: '50',
                                 name: 'db_tag',
-                                description: '''type the weather image tag''',
+                                description: '''type the db image tag''',
                                 ),
                             
                             string(
-                                defaultValue: '20',
+                                defaultValue: '50',
                                 name: 'ui_tag',
                                 description: '''type the ui image tag''',
                                 ),
                             
                             string(
-                                defaultValue: '20',
+                                defaultValue: '50',
                                 name: 'weather_tag',
-                                description: '''type the db image tag''',
+                                description: '''type the weather image tag''',
                                 ),
                             
                             string(
@@ -82,7 +82,7 @@ pipeline {
             }
             agent {
                 docker {
-                  image 'sonarsource/sonar-scanner-cli:4.8.0'
+                  image 'docker.io/sonarsource/sonar-scanner-cli:4.8.0'
                 }
                }
                environment {

@@ -20,7 +20,7 @@ pipeline {
                     properties([
                         parameters([
                             choice( 
-                                choices: ['DEV', 'QA', 'PREPROD'], 
+                                choices: ['DEV', 'QA', 'PREPROD', 'PROD'], 
                                 name: 'ENVIRONMENT'
                             ),
                             string(
@@ -56,6 +56,10 @@ pipeline {
                                 defaultValue: 'production',
                                 name: 'Please_leave_this_section_as_it_is',
                                 trim: true
+                            ),
+                            choice( 
+                                choices: ['BRANCH'], 
+                                name: 'production'
                             ),
                         ])
                     ])
@@ -119,7 +123,6 @@ pipeline {
                    cd auth
                    docker build -t s4arnold/s4-pipepine-02-auth:${BUILD_NUMBER} .
                    cd -
-                   ls 
                 '''
             }
         }
@@ -127,8 +130,7 @@ pipeline {
         stage('push auth') {
             when {
                 expression {
-                   env.ENVIRONMENT == 'DEV' 
-                }
+                   env.ENVIRONMENT == 'DEV' && env.BRANCH == 'production' }
             }
             steps {
                 sh '''
@@ -156,8 +158,7 @@ pipeline {
         stage('push DB') {
             when {
                 expression {
-                   env.ENVIRONMENT == 'DEV' 
-                }
+                   env.ENVIRONMENT == 'DEV' && env.BRANCH == 'production'}
             }
             steps {
                 sh '''
@@ -184,8 +185,7 @@ pipeline {
         stage('push UI') {
             when {
                 expression {
-                   env.ENVIRONMENT == 'DEV' 
-                }
+                   env.ENVIRONMENT == 'DEV' && env.BRANCH == 'production'}
             }
             steps {
                 sh '''
@@ -212,8 +212,7 @@ pipeline {
         stage('push weather') {
             when {
                 expression {
-                   env.ENVIRONMENT == 'DEV' 
-                }
+                   env.ENVIRONMENT == 'DEV' && env.BRANCH == 'production'}
             }
             steps {
                 sh '''
@@ -226,8 +225,7 @@ pipeline {
         stage('QA: pull images') {
             when{   
                 expression {
-                     env.ENVIRONMENT == 'QA' 
-                    }
+                     env.ENVIRONMENT == 'QA' && env.BRANCH == 'production'}
                 }
             steps {
                 sh '''
@@ -243,8 +241,7 @@ pipeline {
         stage('QA: tag images') {
              when{
                  expression {
-                    env.ENVIRONMENT == 'QA'
-                }
+                    env.ENVIRONMENT == 'QA'&& env.BRANCH == 'production' }
             }
              steps {
                 sh '''
@@ -260,7 +257,7 @@ pipeline {
         stage('Update DEV charts') {
             when{
                 expression {
-                   env.ENVIRONMENT == 'DEV' 
+                   env.ENVIRONMENT == 'DEV' && env.BRANCH == 'production'
                 }
             }
 
@@ -307,8 +304,7 @@ pipeline {
         stage('Update QA charts') {
             when{
                 expression {
-                   env.ENVIRONMENT == 'QA' 
-                }
+                   env.ENVIRONMENT == 'QA' && env.BRANCH == 'production' }
             }
 
             steps {
@@ -354,8 +350,7 @@ pipeline {
         stage('Update PREPROD charts') {
             when{
                 expression {
-                   env.ENVIRONMENT == 'PREPROD' 
-                }
+                   env.ENVIRONMENT == 'PREPROD' && env.BRANCH == 'production'}
             }
 
             steps {
@@ -396,10 +391,71 @@ pipeline {
     git push
                 '''            
             }
+        }
+
+        stage('Update PROD charts') {
+            when{
+                expression {
+                   env.ENVIRONMENT == 'DEV' && env.BRANCH == 'production'
+                }
+            }
+
+            steps {
+                sh '''
+    rm -rf s4arnold-projects-charts || true 
+    git clone git@github.com:s4arnold/s4arnold-projects-charts.git
+    cd s4arnold-projects-charts
+    
+    cat << EOF > charts/weatherapp-auth/prod-values.yaml
+    image:
+      repository: s4arnold/s4-pipepine-02-auth
+      tag: "${BUILD_NUMBER}"
+    EOF
+    
+    cat << EOF > charts/weatherapp-mysql/prod-values.yaml
+    image:
+      repository: s4arnold/s4-pipepine-02-db
+      tag: "${BUILD_NUMBER}"
+    EOF 
+    
+    cat << EOF > charts/weatherapp-ui/prod-values.yaml
+    image:
+      repository: s4arnold/s4-pipepine-02-ui
+      tag: "${BUILD_NUMBER}"
+    EOF
+    
+    cat << EOF > charts/weatherapp-weather/prod-values.yaml
+    image:
+      repository: s4arnold/s4-pipepine-02-weather
+      tag: "${BUILD_NUMBER}"
+    EOF
+    
+    git config --global user.name "s4arnold"
+    git config --global user.email "tchuamarnold211@gmail.com"
+    
+    git add -A
+    git commit -m "change jenkins CI"
+    git push
+                '''            
+            }
         }    
     }
     
-
+        stage('wait for argocd') { 
+            when{
+                expression {
+                   env.ENVIRONMENT == 'DEV' || en.ENVIRONMENT == 'PREPROD' && en.ENVIRONMENT == 'PROD' || env.BRANCH == 'production'}
+            }
+            steps {
+                script {
+                    // login into Docker Hub
+                    sh '''
+                       sleep
+                    '''   
+                }
+            }
+        }    
+    
     post {
         always {
             script {

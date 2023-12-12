@@ -77,7 +77,7 @@ pipeline {
         stage('SonarQube analysis') {
             when {
                 expression {
-                   env.ENVIRONMENT == 'DEV' 
+                   env.ENVIRONMENT == 'QA' 
                 }
             }
             agent {

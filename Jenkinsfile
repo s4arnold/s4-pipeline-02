@@ -230,10 +230,10 @@ pipeline {
                 }
             steps {
                 sh '''
-                   docker pull  s4arnold/s4-pipepine-02-auth:${auth_tag}  
-                   docker pull  s4arnold/s4-pipepine-02-db:${db_tag}
-                   docker pull  s4arnold/s4-pipepine-02-ui:${ui_tag}
-                   docker pull  s4arnold/s4-pipepine-02-weather:${weather_tag} 
+                   docker pull  s4arnold/s4-pipepine-02-auth:$auth_tag  
+                   docker pull  s4arnold/s4-pipepine-02-db:$db_tag
+                   docker pull  s4arnold/s4-pipepine-02-ui:$ui_tag
+                   docker pull  s4arnold/s4-pipepine-02-weather:$weather_tag 
                 
                '''       
             }

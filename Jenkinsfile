@@ -319,25 +319,25 @@ pipeline {
     cat << EOF > charts/weatherapp-auth/qa-values.yaml
     image:
       repository: s4arnold/s4-pipepine-02-auth
-      tag: qa-auth_tag}
+      tag: qa-auth_tag
     EOF
     
     cat << EOF > charts/weatherapp-mysql/qa-values.yaml
     image:
       repository: s4arnold/s4-pipepine-02-db
-      tag: qa-db_tag}
+      tag: qa-db_tag
     EOF 
     
     cat << EOF > charts/weatherapp-ui/qa-values.yaml
     image:
       repository: s4arnold/s4-pipepine-02-ui
-      tag: qa-ui_tag}
+      tag: qa-ui_tag
     EOF
     
     cat << EOF > charts/weatherapp-weather/qa-values.yaml
     image:
       repository: s4arnold/s4-pipepine-02-weather
-      tag: qa-weather_tag}
+      tag: qa-weather_tag
     EOF
     
     git config --global user.name "s4arnold"

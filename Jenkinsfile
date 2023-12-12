@@ -25,25 +25,25 @@ pipeline {
                             ),
                             string(
                                 defaultValue: '50',
-                                name: 'auth_tag',
+                                name: 'qa-auth_tag',
                                 description: '''type the auth image tag''',
                                 ),
                             
                             string(
                                 defaultValue: '50',
-                                name: 'db_tag',
+                                name: 'qa-db_tag',
                                 description: '''type the db image tag''',
                                 ),
                             
                             string(
                                 defaultValue: '50',
-                                name: 'ui_tag',
+                                name: 'qa-ui_tag',
                                 description: '''type the ui image tag''',
                                 ),
                             
                             string(
                                 defaultValue: '50',
-                                name: 'weather_tag',
+                                name: 'qa-weather_tag',
                                 description: '''type the weather image tag''',
                                 ),
                             
@@ -230,10 +230,10 @@ pipeline {
                 }
             steps {
                 sh '''
-                   docker pull  s4arnold/s4-pipepine-02-auth:$auth_tag  
-                   docker pull  s4arnold/s4-pipepine-02-db:$db_tag 
-                   docker pull  s4arnold/s4-pipepine-02-ui:$ui_tag
-                   docker pull  s4arnold/s4-pipepine-02-weather:$weather_tag 
+                   docker pull  s4arnold/s4-pipepine-02-auth:${qa-auth_tag}  
+                   docker pull  s4arnold/s4-pipepine-02-db:${qa-db_tag} 
+                   docker pull  s4arnold/s4-pipepine-02-ui:${qa-ui_tag}
+                   docker pull  s4arnold/s4-pipepine-02-weather:${qa-weather_tag} 
                 
                '''       
             }
@@ -246,11 +246,11 @@ pipeline {
                 }
             }
              steps {
-                 sh '''
-                    docker tag  s4arnold/s4-pipepine-02-auth:$auth_tag   s4arnold/s4-pipepine-02-auth:qa-$auth_tag
-                    docker tag  s4arnold/s4-pipepine-02-db:$db_tag       s4arnold/s4-pipepine-02-db:qa-$db_tag
-                    docker tag  s4arnold/s4-pipepine-02-ui:$ui_tag       s4arnold/s4-pipepine-02-ui:qa-$ui_tag
-                    docker tag  s4arnold/s4-pipepine-02-weather:$weather_tag   s4arnold/s4-pipepine-02-weather:qa-$weather_tag 
+                sh '''
+                    docker tag  s4arnold/s4-pipepine-02-auth:${qa-auth_tag}   s4arnold/s4-pipepine-02-auth:qa-${qa-auth_tag}
+                    docker tag  s4arnold/s4-pipepine-02-db:${qa-db_tag}       s4arnold/s4-pipepine-02-db:qa-${qa-db_tag}
+                    docker tag  s4arnold/s4-pipepine-02-ui:${qa-ui_tag}       s4arnold/s4-pipepine-02-ui:qa-${qa-ui_tag}
+                    docker tag  s4arnold/s4-pipepine-02-weather:${qa-weather_tag}   s4arnold/s4-pipepine-02-weather:qa-${qa-weather_tag} 
                  
                 '''       
             }
@@ -319,25 +319,25 @@ pipeline {
     cat << EOF > charts/weatherapp-auth/qa-values.yaml
     image:
       repository: s4arnold/s4-pipepine-02-auth
-      tag: qa-$auth_tag
+      tag: qa-${qa-auth_tag}
     EOF
     
     cat << EOF > charts/weatherapp-mysql/qa-values.yaml
     image:
       repository: s4arnold/s4-pipepine-02-db
-      tag: qa-$db_tag
+      tag: qa-${qa-db_tag}
     EOF 
     
     cat << EOF > charts/weatherapp-ui/qa-values.yaml
     image:
       repository: s4arnold/s4-pipepine-02-ui
-      tag: qa-$ui_tag
+      tag: qa-${qa-ui_tag}
     EOF
     
     cat << EOF > charts/weatherapp-weather/qa-values.yaml
     image:
       repository: s4arnold/s4-pipepine-02-weather
-      tag: qa-$weather_tag
+      tag: qa-${qa-weather_tag}
     EOF
     
     git config --global user.name "s4arnold"

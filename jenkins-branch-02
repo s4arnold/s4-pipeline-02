@@ -13,6 +13,8 @@ pipeline {
 	}
     
     stages {
+        
+        
         stage('SonarQube analysis') {
             when {
                 expression {
@@ -48,17 +50,28 @@ pipeline {
 	    }
 
         stage('Build auth') {
+            when {
+                expression {
+                   env.ENVIRONMENT == 'DEV' 
+                }
+            }
             steps {
                 sh '''
                    cd auth
                    docker build -t s4arnold/s4-pipepine-02-auth:${BUILD_NUMBER} .
                    cd -
+                   ls 
                 '''
             }
         }
 
 
         stage('Build DB') {
+            when {
+                expression {
+                   env.ENVIRONMENT == 'DEV' 
+                }
+            }
             steps {
                 sh '''
                    cd DB
@@ -72,6 +85,11 @@ pipeline {
         
 
         stage('Build UI') {
+            when {
+                expression {
+                   env.ENVIRONMENT == 'DEV' 
+                }
+            }
             steps {
                 sh '''
                    cd UI
@@ -84,6 +102,11 @@ pipeline {
         
 
         stage('Build weather') {
+            when {
+                expression {
+                   env.ENVIRONMENT == 'DEV' 
+                }
+            }
             steps {
                 sh '''
                    cd weather
@@ -100,16 +123,16 @@ pipeline {
     post {
    
       success {
-         slackSend (channel: '#random', color: 'good', message: "SUCCESSFUL: Application ${APP_NAME}  Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+         slackSend (channel: '#random', color: 'good', message: "SUCCESSFUL: Application s4arnold-weather-app  Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
        }
    
     
        unstable {
-         slackSend (channel: '#random', color: 'warning', message: "UNSTABLE: Application ${APP_NAME}  Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+         slackSend (channel: '#random', color: 'warning', message: "UNSTABLE: Application s4arnold-weather-app  Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
        }
    
        failure {
-         slackSend (channel: '#random', color: '#FF0000', message: "FAILURE: Application ${APP_NAME} Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+         slackSend (channel: '#random', color: '#FF0000', message: "FAILURE: Application s4arnold-weather-app Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
        }
       
        cleanup {

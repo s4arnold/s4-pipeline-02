@@ -13,60 +13,6 @@ pipeline {
 	}
     
     stages {
-
-        stage('Setup parameters') {
-            steps {
-                script {
-                    properties([
-                        parameters([
-                            choice( 
-                                choices: ['DEV', 'QA', 'PREPROD'], 
-                                name: 'ENVIRONMENT'
-                            ),
-                            string(
-                                defaultValue: '50',
-                                name: 'auth_tag',
-                                description: '''type the auth image tag''',
-                                ),
-                            
-                            string(
-                                defaultValue: '50',
-                                name: 'db_tag',
-                                description: '''type the db image tag''',
-                                ),
-                            
-                            string(
-                                defaultValue: '50',
-                                name: 'ui_tag',
-                                description: '''type the ui image tag''',
-                                ),
-                            
-                            string(
-                                defaultValue: '50',
-                                name: 'weather_tag',
-                                description: '''type the weather image tag''',
-                                ),
-                            
-                            string(
-                                name: 'WARNTIME',
-                                defaultValue: '0',
-                                description: '''Warning time (in minutes) before starting upgrade'''
-                            ),
-
-                            choice( 
-                                choices: ['APP_NAME'], 
-                                name: 's4arnold-weather-app'
-                            ),
-                
-                        ])
-                    ])
-                }
-            }
-        }
-            
-
-
-
         stage('SonarQube analysis') {
             when {
                 expression {
@@ -192,6 +138,14 @@ pipeline {
        }
     }
 }
+
+
+
+
+
+
+
+    
 
 
 

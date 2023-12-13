@@ -1,1 +1,202 @@
+pipeline {
+    agent any 
 
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '30'))
+        disableConcurrentBuilds()
+        timeout (time: 60, unit: 'MINUTES')
+        timestamps()
+  }
+
+    environment {
+		DOCKERHUB_CREDENTIALS=credentials('Dockerhub-creds')
+	}
+    
+    stages {
+
+        stage('Setup parameters') {
+            steps {
+                script {
+                    properties([
+                        parameters([
+                            choice( 
+                                choices: ['DEV', 'QA', 'PREPROD'], 
+                                name: 'ENVIRONMENT'
+                            ),
+                            string(
+                                defaultValue: '50',
+                                name: 'auth_tag',
+                                description: '''type the auth image tag''',
+                                ),
+                            
+                            string(
+                                defaultValue: '50',
+                                name: 'db_tag',
+                                description: '''type the db image tag''',
+                                ),
+                            
+                            string(
+                                defaultValue: '50',
+                                name: 'ui_tag',
+                                description: '''type the ui image tag''',
+                                ),
+                            
+                            string(
+                                defaultValue: '50',
+                                name: 'weather_tag',
+                                description: '''type the weather image tag''',
+                                ),
+                            
+                            string(
+                                name: 'WARNTIME',
+                                defaultValue: '0',
+                                description: '''Warning time (in minutes) before starting upgrade'''
+                            ),
+
+                            choice( 
+                                choices: ['APP_NAME'], 
+                                name: 's4arnold-weather-app'
+                            ),
+                
+                        ])
+                    ])
+                }
+            }
+        }
+            
+
+
+
+        stage('SonarQube analysis') {
+            when {
+                expression {
+                   env.ENVIRONMENT == 'DEV' 
+                }
+            }
+            agent {
+                docker {
+                  image 'docker.io/sonarsource/sonar-scanner-cli:latest'
+                }
+               }
+               environment {
+        CI = 'true'
+        //  scannerHome = tool 'Sonar'
+        scannerHome='/opt/sonar-scanner'    
+
+        }
+            steps{
+                withSonarQubeEnv('Sonar') {
+                    sh "${scannerHome}/bin/sonar-scanner"
+                }
+            }
+        }
+
+        stage('Dockerhub Login') {
+	    	steps {
+                script {
+	    		    sh '''
+                        echo "${DOCKERHUB_CREDENTIALS_PSW}" | docker login -u "${DOCKERHUB_CREDENTIALS_USR}" --password-stdin
+                    '''
+                }
+	    	}
+	    }
+
+        stage('Build auth') {
+            when {
+                expression {
+                   env.ENVIRONMENT == 'DEV' 
+                }
+            }
+            steps {
+                sh '''
+                   cd auth
+                   docker build -t s4arnold/s4-pipepine-02-auth:${BUILD_NUMBER} .
+                   cd -
+                   ls 
+                '''
+            }
+        }
+
+
+        stage('Build DB') {
+            when {
+                expression {
+                   env.ENVIRONMENT == 'DEV' 
+                }
+            }
+            steps {
+                sh '''
+                   cd DB
+                   docker build -t s4arnold/s4-pipepine-02-db:${BUILD_NUMBER} .
+                   cd -
+
+                '''
+            }
+        }
+
+        
+
+        stage('Build UI') {
+            when {
+                expression {
+                   env.ENVIRONMENT == 'DEV' 
+                }
+            }
+            steps {
+                sh '''
+                   cd UI
+                   docker build -t s4arnold/s4-pipepine-02-ui:${BUILD_NUMBER} .
+                   cd -
+                '''
+            }
+        }
+
+        
+
+        stage('Build weather') {
+            when {
+                expression {
+                   env.ENVIRONMENT == 'DEV' 
+                }
+            }
+            steps {
+                sh '''
+                   cd weather
+                   docker build -t s4arnold/s4-pipepine-02-weather:${BUILD_NUMBER} .
+                   cd -
+                '''
+            }
+        }    
+    }
+    
+
+
+
+    post {
+   
+      success {
+         slackSend (channel: '#development-alerts', color: 'good', message: "SUCCESSFUL: Application ${APP_NAME}  Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+       }
+   
+    
+       unstable {
+         slackSend (channel: '#development-alerts', color: 'warning', message: "UNSTABLE: Application ${APP_NAME}  Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+       }
+   
+       failure {
+         slackSend (channel: '#development-alerts', color: '#FF0000', message: "FAILURE: Application ${APP_NAME} Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+       }
+      
+       cleanup {
+         deleteDir()
+       }
+    }
+}
+
+
+
+
+
+
+
+    

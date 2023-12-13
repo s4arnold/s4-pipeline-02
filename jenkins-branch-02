@@ -13,6 +13,15 @@ pipeline {
 	}
     
     stages {
+        
+        stage('Setup parameters') { 
+        choice( 
+                choices: ['APP_NAME'], 
+                name: 's4-pipeline-branches'
+            ),
+        }
+        
+        
         stage('SonarQube analysis') {
             when {
                 expression {
@@ -58,7 +67,7 @@ pipeline {
                    cd auth
                    docker build -t s4arnold/s4-pipepine-02-auth:${BUILD_NUMBER} .
                    cd -
-                   ls -l
+                   ls 
                 '''
             }
         }
@@ -110,7 +119,6 @@ pipeline {
                    cd weather
                    docker build -t s4arnold/s4-pipepine-02-weather:${BUILD_NUMBER} .
                    cd -
-                   ls
                 '''
             }
         }    
@@ -139,14 +147,6 @@ pipeline {
        }
     }
 }
-
-
-
-
-
-
-
-    
 
 
 

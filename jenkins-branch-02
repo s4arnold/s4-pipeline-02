@@ -13,6 +13,15 @@ pipeline {
 	}
     
     stages {
+
+        stage('Setup parameters') { 
+        choice( 
+                choices: ['APP_NAME'], 
+                name: 's4-pipeline-branches'
+            ),
+        }
+
+        
         stage('SonarQube analysis') {
             when {
                 expression {

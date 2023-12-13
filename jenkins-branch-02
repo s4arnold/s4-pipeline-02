@@ -48,11 +48,6 @@ pipeline {
 	    }
 
         stage('Build auth') {
-            when {
-                expression {
-                   env.ENVIRONMENT == 'DEV' 
-                }
-            }
             steps {
                 sh '''
                    cd auth
@@ -64,11 +59,6 @@ pipeline {
 
 
         stage('Build DB') {
-            when {
-                expression {
-                   env.ENVIRONMENT == 'DEV' 
-                }
-            }
             steps {
                 sh '''
                    cd DB
@@ -82,11 +72,6 @@ pipeline {
         
 
         stage('Build UI') {
-            when {
-                expression {
-                   env.ENVIRONMENT == 'DEV' 
-                }
-            }
             steps {
                 sh '''
                    cd UI
@@ -99,11 +84,6 @@ pipeline {
         
 
         stage('Build weather') {
-            when {
-                expression {
-                   env.ENVIRONMENT == 'DEV' 
-                }
-            }
             steps {
                 sh '''
                    cd weather

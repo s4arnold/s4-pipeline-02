@@ -23,7 +23,12 @@ pipeline {
                              defaultValue: 'develop',
                              name: 'Please_leave_this_section_as_it_is',
                             ),
-                        ]),
+                        string(
+                                defaultValue: 'production',
+                                name: 'Please_leave_this_section_as_it_is',
+                                trim: true
+                            ),                        
+                         ]),
 
 
 

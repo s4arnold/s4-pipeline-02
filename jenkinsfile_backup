@@ -91,7 +91,7 @@ export DB_NAME="odilia"
 export DB_USER="odilia"
 export DB_HOST="54.198.219.220" 
 export DB_PORT="5432"   
-bash backup.sh    
+bash backup-s4arnold.sh    
 unset  DB_PASSWORD
 unset  DB_NAME
 unset  DB_USER
@@ -122,7 +122,7 @@ export DB_NAME="ephraim"
 export DB_USER="ephraim"
 export DB_HOST="18.232.100.107" 
 export DB_PORT="5436"   
-bash backup.sh    
+bash backup-s4arnold.sh    
 unset  DB_PASSWORD
 unset  DB_NAME
 unset  DB_USER

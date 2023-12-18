@@ -1,0 +1,187 @@
+pipeline {
+    agent {
+        docker {
+            image 's4arnold/personnal-image:0.0.18' 
+            args '-u root' // Optional: Run as root user in the container
+        }
+    }
+
+
+    stages {
+        stage('Setup parameters') {  
+            steps {
+                script {
+                    properties([
+                        parameters([
+
+
+                             string(name: 'WARNTIME',
+                             defaultValue: '0',
+                            description: '''Warning time (in minutes) before starting BACKUP '''),
+
+                        string(
+                             defaultValue: 'develop',
+                             name: 'Please_leave_this_section_as_it_is',
+                            ),
+                        ]),
+
+
+
+                    ])
+                }
+            }
+        }
+
+
+       stage('warning') {
+      steps {
+        script {
+            notifyBACKUP (currentBuild.currentResult, "WARNING")
+            sleep(time:env.WARNTIME, unit:"MINUTES")
+        }
+      }
+    }
+
+
+
+
+stage('backup ryann') {
+
+	      steps {
+	        script {
+	          withCredentials([
+	            string(credentialsId: 'ryann_db', variable: 'RYANN_DB_PASSWD'),
+	          ]) {
+
+	            sh '''
+export DB_PASSWORD=${RYANN_DB_PASSWD}
+PGPASS_FILE="$HOME/.pgpass"
+export DB_NAME="ryann"
+export DB_USER="ryann"
+export DB_HOST="54.84.93.66" 
+export DB_PORT="5432"   
+bash backup-s4arnold.sh    
+unset  DB_PASSWORD
+unset  DB_NAME
+unset  DB_USER
+unset  DB_HOST
+unset  DB_PORT
+	            '''
+	          }
+
+	        }
+
+	      }
+
+	    }
+
+
+stage('backup odilia') {
+
+	      steps {
+	        script {
+	          withCredentials([
+	            string(credentialsId: 'odilia_db', variable: 'ODILIA_DB_PASSWD'),
+	          ]) {
+
+	            sh '''
+export DB_PASSWORD=${ODILIA_DB_PASSWD}
+PGPASS_FILE="$HOME/.pgpass"
+export DB_NAME="odilia"
+export DB_USER="odilia"
+export DB_HOST="54.198.219.220" 
+export DB_PORT="5432"   
+bash backup.sh    
+unset  DB_PASSWORD
+unset  DB_NAME
+unset  DB_USER
+unset  DB_HOST
+unset  DB_PORT
+	            '''
+	          }
+
+	        }
+
+	      }
+
+	    }
+
+
+stage('backup ephraim') {
+
+	      steps {
+	        script {
+	          withCredentials([
+	            string(credentialsId: 'ephraim_db', variable: 'EPHRAIM_DB_PASSWD'),
+	          ]) {
+
+	            sh '''
+export DB_PASSWORD=${EPHRAIM_DB_PASSWD}
+PGPASS_FILE="$HOME/.pgpass"
+export DB_NAME="ephraim"
+export DB_USER="ephraim"
+export DB_HOST="18.232.100.107" 
+export DB_PORT="5436"   
+bash backup.sh    
+unset  DB_PASSWORD
+unset  DB_NAME
+unset  DB_USER
+unset  DB_HOST
+unset  DB_PORT
+	            '''
+	          }
+
+	        }
+
+	      }
+
+	    }
+
+
+
+
+
+    }
+
+post {
+    always {
+      script {
+        notifyBACKUP (currentBuild.currentResult, "POST")
+      }
+    }
+    
+  }
+
+}
+
+
+def notifyBACKUP (String buildResult, String whereAt) {
+  if (Please_leave_this_section_as_it_is == 'origin/develop') {
+    channel = 'random'
+  } else {
+    channel = 'random'
+  }
+  if (buildResult == "SUCCESS") {
+    switch(whereAt) {
+      case 'WARNING':
+        slackSend(channel: channel,
+                color: "#439FE0",
+                message: "s4arnold-weather-app: BACKUP  starting in ${env.WARNTIME} minutes @ ${env.BUILD_URL} ")
+        break
+    case 'STARTING':
+      slackSend(channel: channel,
+                color: "good",
+                message: "s4arnold-weather-app: Starting BACKUP  @ ${env.BUILD_URL}")
+      break
+    default:
+        slackSend(channel: channel,
+                color: "good",
+                message: "s4arnold-weather-app: BACKUP  completed successfully @ ${env.BUILD_URL} ")
+        break
+    }
+  } else {
+    slackSend(channel: channel,
+              color: "danger",
+              message: "s4-weather-app: BACKUP  was not successful. Please investigate it immediately.  @ ${env.BUILD_URL} ")
+  }
+}
